@@ -17,6 +17,19 @@ public class Main {
         }
         System.out.println("}");
 
+        Report r1 = new ReportByProject("data/simple/2012");
+        r1.generate("console");
+        System.out.println("");
+        System.out.println("##############################");
+        System.out.println("");
+        Report r2 = new ReportByPerson("data/simple/2012");
+        r2.generate("console");
+        System.out.println("");
+        System.out.println("##############################");
+        System.out.println("");
+        Report r3 = new ReportByTask("data/simple/2012");
+        r3.generate("console");
+
         String path;
         String type;
         String output;
