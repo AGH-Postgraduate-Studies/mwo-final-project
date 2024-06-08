@@ -11,5 +11,5 @@ import java.time.LocalDate;
 public class WorkerTimeSheet {
     private LocalDate date;
     private String task;
-    private float time;
+    private double time;
 }
