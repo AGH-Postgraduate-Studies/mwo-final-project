@@ -1,10 +1,13 @@
 package org.example;
 
-import java.util.Arrays;
+import org.example.model.WorkerTimeSheet;
 
 public class Main {
     public static void main(String[] args) {
-        String path;
+        System.out.println("Hello reporter app!");
+        new WorkerTimeSheet();
+      
+              String path;
         String type;
         String output;
 
