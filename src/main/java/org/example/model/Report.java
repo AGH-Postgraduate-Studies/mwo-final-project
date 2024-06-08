@@ -25,7 +25,7 @@ public abstract class Report {
                 result.addAll(getRawData(folderPath + "/" + childFolder.getName()));
             }
         } else {
-            if (!folderPath.contains("~lock")) {
+            if (!folderPath.contains("~lock") && !folderPath.contains(".DS_Store")) {
                 readFile(folderPath, result);
             }
         }
@@ -41,7 +41,7 @@ public abstract class Report {
         System.out.println(getDescription());
         for (List l : getData(path)) {
             for (Object o : l) {
-                System.out.print(o + "\t");
+                System.out.print("    " + o + "\t");
             }
             System.out.println();
         }
