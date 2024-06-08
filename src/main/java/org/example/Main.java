@@ -1,7 +1,6 @@
 package org.example;
 
-import org.example.model.Collector;
-import org.example.model.WorkerTimeSheet;
+import org.example.model.*;
 import org.example.utils.ExcelReader;
 
 import java.util.List;
@@ -42,8 +41,20 @@ public class Main {
             output = "console";
         }
 
-        System.out.println("Generate report for path: " + path);
-        System.out.println("Report type: " + type);
-        System.out.println("Output: " + output);
+        Report report;
+
+        if (type.equals("1")) {
+            report = new ReportByProject(path);
+        } else if (type.equals("2")) {
+            report = new ReportByPerson(path);
+        } else if (type.equals("3")) {
+            report = new ReportByTask(path);
+        } else {
+            System.out.println("Wrong type provided");
+            return;
+        }
+
+        report.generate(output);
+
     }
 }
