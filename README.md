@@ -32,7 +32,7 @@ TODO Add an example images of an example report in console
 java -jar reporter.jar C://report/2012 1 pdf
 ```
 Generate report form folder C://report/2012 of type 1 (personal) and pdf output
-```
+
 
 ## Types of reports
 ### Monthly report
