@@ -1,9 +1,6 @@
 package org.example.model;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static java.util.Arrays.asList;
 
@@ -27,6 +24,8 @@ public class ReportByTask extends Report {
 
         List<List<Object>> result = new ArrayList<>();
         map.forEach((k, v) -> result.add(asList(k, v)));
+
+        result.sort((l1, l2) -> (int) ((Double) l2.get(1) - (Double) l1.get(1)));
 
         return result;
     }
