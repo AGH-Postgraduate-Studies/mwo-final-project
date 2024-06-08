@@ -42,7 +42,7 @@ public class ExcelReader {
                         Cell taskCell = row.getCell(1);
                         Cell timeCell = row.getCell(2);
 
-                        if (dateCell != null)
+                        if (dateCell != null && dateCell.getCellType() != CellType.BLANK)
                             if (DateUtil.isCellDateFormatted(dateCell))
                                 builder.date(dateCell.getLocalDateTimeCellValue().toLocalDate());
                         if (taskCell != null)
