@@ -2,6 +2,7 @@ package org.example;
 
 import org.example.model.*;
 import org.example.utils.ExcelReader;
+import org.example.utils.ExcelPrinter;
 
 import java.util.List;
 
@@ -33,6 +34,8 @@ public class Main {
         String path;
         String type;
         String output;
+
+        ExcelPrinter.test();
 
         try {
             path = args[0];
@@ -68,6 +71,5 @@ public class Main {
         }
 
         report.generate(output);
-
     }
 }
