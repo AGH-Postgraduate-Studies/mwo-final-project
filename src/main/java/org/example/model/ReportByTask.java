@@ -20,6 +20,10 @@ public class ReportByTask extends Report {
                     map.put(ts.getTask(), ts.getTime());
                 }
             }
+
+            if (col.getErrorsList() != null) {
+                this.errorsList.addAll(col.getErrorsList());
+            }
         }
 
         List<List<Object>> result = new ArrayList<>();
