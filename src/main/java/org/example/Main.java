@@ -21,14 +21,14 @@ public class Main {
 
         Report r1 = new ReportByProject("data/simple/2012");
         r1.generate("console");
-        System.out.println("");
+        System.out.println(" ");
         System.out.println("##############################");
-        System.out.println("");
+        System.out.println(" ");
         Report r2 = new ReportByPerson("data/simple/2012");
         r2.generate("console");
-        System.out.println("");
+        System.out.println(" ");
         System.out.println("##############################");
-        System.out.println("");
+        System.out.println(" ");
         Report r3 = new ReportByTask("data/simple/2012");
         r3.generate("console");
 
@@ -60,15 +60,14 @@ public class Main {
 
         Report report;
 
-        if (type.equals("1")) {
-            report = new ReportByProject(path);
-        } else if (type.equals("2")) {
-            report = new ReportByPerson(path);
-        } else if (type.equals("3")) {
-            report = new ReportByTask(path);
-        } else {
-            System.out.println("Wrong type provided");
-            return;
+        switch (type) {
+            case "1" -> report = new ReportByProject(path);
+            case "2" -> report = new ReportByPerson(path);
+            case "3" -> report = new ReportByTask(path);
+            default -> {
+                System.out.println("Wrong type provided");
+                return;
+            }
         }
 
         report.generate(output);
