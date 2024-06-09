@@ -19,10 +19,10 @@ public class Main {
         System.out.println(" ");
         System.out.println("##############################");
         System.out.println(" ");
-        Report r3 = new ReportByTask("data/simple/2012");
+        Report r3 = new ReportByProject("data/simple/2012");
         r3.generate("console");
         Report r4 = new ReportByPersonAdd("data/simple/2012");
-        r4.generate("console");
+        r4.generate("chart");
 
         String path;
         String type;

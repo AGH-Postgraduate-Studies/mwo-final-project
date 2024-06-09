@@ -61,6 +61,8 @@ public abstract class Report {
         printErrors();
     }
 
+    public abstract void printChart();
+
     protected abstract List<List<Object>> getData(String path);
 
     protected abstract String getDescription();
@@ -70,7 +72,7 @@ public abstract class Report {
             case "console" -> printToConsole();
             case "pdf" -> System.out.println("Generating PDF file...");
             case "excel" -> System.out.println("Generating Excel file...");
-            case "chart" -> System.out.println("Generating chart file...");
+            case "chart" -> printChart();
             default -> System.out.println("Wrong output provided");
         }
     }

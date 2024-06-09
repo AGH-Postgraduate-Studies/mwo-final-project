@@ -1,5 +1,10 @@
 package org.example.model;
 
+import org.knowm.xchart.CategoryChart;
+import org.knowm.xchart.CategoryChartBuilder;
+import org.knowm.xchart.SwingWrapper;
+import org.knowm.xchart.style.Styler;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -10,6 +15,35 @@ import static java.util.Arrays.asList;
 public class ReportByProject extends Report {
     public ReportByProject(String path) {
         super(path);
+    }
+
+    @Override
+    public void printChart() {
+        List<List<Object>> auxPersonTimeListList = getData(this.path);
+        List<String> projects = new ArrayList<>();
+        List<Double> totalTime = new ArrayList<>();
+
+        for(var entry : auxPersonTimeListList) {
+            projects.add(String.valueOf(entry.get(0)));
+            totalTime.add((Double) entry.get(1));
+        }
+
+        CategoryChart chart = new CategoryChartBuilder()
+                .width(800)
+                .height(600)
+                .title("Projects Total times")
+                .xAxisTitle("Project")
+                .yAxisTitle("Total Time")
+                .build();
+
+        chart.getStyler().setLegendPosition(Styler.LegendPosition.InsideNW);
+        chart.getStyler().setHasAnnotations(true);
+
+        chart.addSeries("Project - Total time",
+                projects,
+                totalTime);
+
+        new SwingWrapper<>(chart).displayChart();
     }
 
     protected List<List<Object>> getData(String path) {
