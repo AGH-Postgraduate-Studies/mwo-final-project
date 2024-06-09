@@ -90,6 +90,8 @@ public abstract class Report {
         printErrors();
     }
 
+    public abstract void printChart();
+
     protected abstract List<List<Object>> getData(String path);
 
     protected abstract String getDescription();
@@ -112,7 +114,7 @@ public abstract class Report {
             case "console" -> printToConsole();
             case "pdf" -> getPdf();
             case "excel" -> generateExcelFromData();
-            case "chart" -> System.out.println("Generating chart file...");
+            case "chart" -> printChart();
             default -> System.out.println("Wrong output provided");
         }
     }
