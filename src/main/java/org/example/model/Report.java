@@ -56,7 +56,7 @@ public abstract class Report {
         if (output.equals("console")) {
             printToConsole();
         } else if (output.equals("pdf")) {
-            getPdf("abc");
+            getPdf();
         } else if (output.equals("excel")) {
             System.out.println("Generating Excel file...");
         } else if (output.equals("chart")) {
@@ -65,9 +65,17 @@ public abstract class Report {
             System.out.println("Wrong output provided");
         }
     }
-    protected void getPdf(String message)
+    protected void getPdf()
     {
-    PdfGenerator.generatePdf("abc");
+        StringBuilder pdfBody = new StringBuilder(" ");
+
+        pdfBody.append(getDescription());
+        for (List l : getData(path)) {
+            for (Object o : l) {
+               pdfBody.append("    ").append(o).append(" ");
+            }
+        }
+    PdfGenerator.generatePdf(getDescription(),getData(path));
     }
 
 }
