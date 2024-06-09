@@ -18,6 +18,7 @@ public class Main {
         }
         System.out.println("}");
 
+
         Report r1 = new ReportByProject("data/simple/2012");
         r1.generate("console");
         System.out.println("");
