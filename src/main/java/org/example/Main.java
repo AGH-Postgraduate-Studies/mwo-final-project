@@ -1,12 +1,8 @@
 package org.example;
 
 import org.example.model.*;
-
-import java.util.List;
-
 public class Main {
     public static void main(String[] args) {
-
         String path;
         String type;
         String output;

@@ -6,9 +6,6 @@ import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 
 import java.io.FileOutputStream;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.time.LocalDate;
 
 public class ExcelPrinter {
@@ -38,14 +35,6 @@ public class ExcelPrinter {
         this.dateTo = dateTo;
         this.workbook = new HSSFWorkbook();
         this.sheet = workbook.createSheet(title);
-    }
-
-    public void addRow(String person, String task, double time) {
-        HSSFRow row = sheet.createRow(rowIndex++);
-
-        row.createCell(0).setCellValue(person);
-        row.createCell(1).setCellValue(task);
-        row.createCell(2).setCellValue(time);
     }
 
     public void addRow(Object[] array) {
