@@ -1,6 +1,7 @@
 package org.example.model;
 
 import org.example.utils.ExcelReader;
+import org.example.utils.PdfGenerator;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -55,7 +56,7 @@ public abstract class Report {
         if (output.equals("console")) {
             printToConsole();
         } else if (output.equals("pdf")) {
-            System.out.println("Generating PDF file...");
+            getPdf("abc");
         } else if (output.equals("excel")) {
             System.out.println("Generating Excel file...");
         } else if (output.equals("chart")) {
@@ -63,6 +64,10 @@ public abstract class Report {
         } else {
             System.out.println("Wrong output provided");
         }
+    }
+    protected void getPdf(String message)
+    {
+    PdfGenerator.generatePdf("abc");
     }
 
 }
