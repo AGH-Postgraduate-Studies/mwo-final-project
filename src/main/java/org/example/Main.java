@@ -10,10 +10,20 @@ public class Main {
     public static void main(String[] args) {
 
         Report r1 = new ReportByTask("data/errors/negative_numbers/2012");
+        List<List<Collector>> list = ExcelReader.readExcel("data/simple/2012/01/Kowalski_Jan.xls");
+        System.out.println("Database {");
+        for(var x : list) {
+            for(var y : x) {
+                System.out.println("\t" + y);
+            }
+        }
+        System.out.println("}");
+
+        System.out.println("##############################");
+//        Report r1 = new ReportByProject("data/simple/2012");
         r1.generate("console");
         System.out.println(" ");
         System.out.println("##############################");
-        System.out.println(" ");
         Report r2 = new ReportByPerson("data/simple/2012");
         r2.generate("console");
         System.out.println(" ");
@@ -28,7 +38,7 @@ public class Main {
         String type;
         String output;
 
-        ExcelPrinter.test();
+        ExcelPrinter.generateExcel();
 
         try {
             path = args[0];

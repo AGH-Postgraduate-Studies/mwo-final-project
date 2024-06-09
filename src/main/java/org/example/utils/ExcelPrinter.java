@@ -7,7 +7,6 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.LocalDate;
@@ -37,14 +36,11 @@ public class ExcelPrinter {
         this.person = person;
         this.dateFrom = dateFrom;
         this.dateTo = dateTo;
-
         this.workbook = new HSSFWorkbook();
         this.sheet = workbook.createSheet(title);
-
-        //initializeWorkbook();
     }
 
-    public static void test() {
+    public static void generateExcel() {
         String exportPath = "data/simple/2012/01/report.xls";
         try {
             Files.createDirectories(Paths.get("data/simple/2012/01/"));
@@ -64,21 +60,6 @@ public class ExcelPrinter {
         printer.setColumnWidth(new int[]{10, 10, 10});
 
         printer.save();
-    }
-
-    private void initializeWorkbook() {
-        try {
-            InputStream inputStream = ExcelPrinter.class.getResourceAsStream(fileName);
-            if (inputStream == null) {
-                throw new IllegalArgumentException("File not found: " + fileName);
-            }
-
-            workbook = new HSSFWorkbook(inputStream);
-            sheet = workbook.getSheetAt(0);
-            inputStream.close();
-        } catch (Exception e) {
-            System.out.println("Error while initializing workbook: " + e.getMessage());
-        }
     }
 
     public void addRow(String task, double time) {

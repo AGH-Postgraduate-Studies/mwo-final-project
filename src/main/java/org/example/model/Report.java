@@ -1,8 +1,13 @@
 package org.example.model;
 
+import org.example.utils.ExcelPrinter;
 import org.example.utils.ExcelReader;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -61,6 +66,47 @@ public abstract class Report {
         printErrors();
     }
 
+    public void generateExcel() {
+        System.out.println("Generating Excel file...");
+        String exportPath = "data/output/report.xls";
+
+        try {
+            Files.createDirectories(Paths.get("data/output/"));
+        } catch (IOException e) {
+            System.out.println("Failed to create directories: " + e.getMessage());
+            return;
+        }
+
+        ExcelPrinter printer = new ExcelPrinter(
+                exportPath,
+                "report.xls",
+                "Report",
+                "Kowalski_Jan.xls",
+                LocalDate.now(),
+                LocalDate.now().plusDays(1)
+        );
+
+        for (var l : getData(path)) {
+            if (l.size() < 3) {
+                System.err.println("Skipping row due to insufficient data: " + l);
+                continue;
+            }
+
+            String task = l.get(1).toString();
+            double time;
+            try {
+                time = Double.parseDouble(l.get(2).toString());
+            } catch (NumberFormatException e) {
+                System.err.println("Skipping row due to invalid time format: " + l);
+                continue;
+            }
+
+            printer.addRow(task, time);
+        }
+
+        printer.setColumnWidth(new int[]{20, 30, 10});
+        printer.save();
+    }
     protected abstract List<List<Object>> getData(String path);
 
     protected abstract String getDescription();
@@ -69,7 +115,7 @@ public abstract class Report {
        switch (output) {
             case "console" -> printToConsole();
             case "pdf" -> System.out.println("Generating PDF file...");
-            case "excel" -> System.out.println("Generating Excel file...");
+            case "excel" -> generateExcel();
             case "chart" -> System.out.println("Generating chart file...");
             default -> System.out.println("Wrong output provided");
         }
