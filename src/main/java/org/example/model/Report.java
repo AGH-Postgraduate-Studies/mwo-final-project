@@ -1,7 +1,6 @@
 package org.example.model;
 
 import org.example.utils.ExcelReader;
-import org.example.utils.PdfGenerator;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -66,19 +65,7 @@ public abstract class Report {
 
     protected abstract String getDescription();
 
-    protected void getPdf()
-    {
-        StringBuilder pdfBody = new StringBuilder(" ");
-
-        pdfBody.append(getDescription());
-        for (List l : getData(path)) {
-            for (Object o : l) {
-               pdfBody.append("    ").append(o).append(" ");
-            }
-        }
-    PdfGenerator.generatePdf(getDescription(),getData(path));
-    }
-
+    public void generate(String output) {
        switch (output) {
             case "console" -> printToConsole();
             case "pdf" -> System.out.println("Generating PDF file...");
@@ -87,5 +74,4 @@ public abstract class Report {
             default -> System.out.println("Wrong output provided");
         }
     }
-
 }
