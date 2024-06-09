@@ -4,16 +4,14 @@ import org.example.utils.ExcelPrinter;
 import org.example.utils.ExcelReader;
 
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Report {
     String path;
-    List<Error> errorsList =  new ArrayList<>();
+    List<Error> errorsList = new ArrayList<>();
 
     public Report(String path) {
         this.path = path;
@@ -48,7 +46,6 @@ public abstract class Report {
                 System.out.print("Error in file: " + er.getFileName() + " in sheet: " + er.getSheet());
                 System.out.print(", in row: " + er.getRow() + ", in column: " + er.getColumn());
                 System.out.print(" Error type is: " + er.getType());
-
                 System.out.println();
             }
         }
@@ -62,60 +59,71 @@ public abstract class Report {
             }
             System.out.println();
         }
-
         printErrors();
     }
 
     public void generateExcel() {
-        System.out.println("Generating Excel file...");
         String exportPath = "data/output/report.xls";
-
-        try {
-            Files.createDirectories(Paths.get("data/output/"));
-        } catch (IOException e) {
-            System.out.println("Failed to create directories: " + e.getMessage());
-            return;
-        }
+        String fileName = "report.xls";
+        String title = "Report";
+        String person = "Kowalski_Jan.xls";
+        LocalDate dateFrom = LocalDate.of(2012, 1, 1);
+        LocalDate dateTo = LocalDate.now().plusDays(1);
 
         ExcelPrinter printer = new ExcelPrinter(
                 exportPath,
-                "report.xls",
-                "Report",
-                "Kowalski_Jan.xls",
-                LocalDate.now(),
-                LocalDate.now().plusDays(1)
+                fileName,
+                title,
+                person,
+                dateFrom,
+                dateTo
         );
 
-        for (var l : getData(path)) {
-            if (l.size() < 3) {
-                System.err.println("Skipping row due to insufficient data: " + l);
-                continue;
-            }
-
-            String task = l.get(1).toString();
-            double time;
-            try {
-                time = Double.parseDouble(l.get(2).toString());
-            } catch (NumberFormatException e) {
-                System.err.println("Skipping row due to invalid time format: " + l);
-                continue;
-            }
-
-            printer.addRow(task, time);
+        for (int i = 1; i <= 10; i++) {
+            printer.addRow(fileName, "Project " + i, i * 1.5);
         }
 
         printer.setColumnWidth(new int[]{20, 30, 10});
         printer.save();
     }
+
+    public void generateExcelFromData() {
+        String exportPath = "data/output/report.xls";
+        LocalDateTime.now();
+        String fileName = "report" + LocalDateTime.now().toString().replace(":", "-") + ".xls";
+        String title = getDescription();
+        LocalDate dateFrom = LocalDate.of(2012, 1, 1);
+        LocalDate dateTo = LocalDate.now().plusDays(1);
+
+        ExcelPrinter printer = new ExcelPrinter(
+                exportPath,
+                fileName,
+                title,
+                "Generated_Report",
+                dateFrom,
+                dateTo
+        );
+
+        List<List<Object>> data = getData(path);
+        for (List<Object> row : data) {
+            printer.addRow(row.toArray());
+        }
+
+        printer.setColumnWidth(new int[]{20, 30, 10});
+        printer.save();
+
+        printErrors();
+    }
+
     protected abstract List<List<Object>> getData(String path);
 
     protected abstract String getDescription();
 
     public void generate(String output) {
-       switch (output) {
+        switch (output) {
             case "console" -> printToConsole();
             case "pdf" -> System.out.println("Generating PDF file...");
-            case "excel" -> generateExcel();
+            case "excel" -> generateExcelFromData();
             case "chart" -> System.out.println("Generating chart file...");
             default -> System.out.println("Wrong output provided");
         }
