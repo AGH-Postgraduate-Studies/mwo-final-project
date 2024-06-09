@@ -3,6 +3,7 @@ package org.example.utils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
 import org.example.model.Collector;
+import org.example.model.Error;
 import org.example.model.WorkerTimeSheet;
 
 import java.io.File;
@@ -12,6 +13,14 @@ import java.util.ArrayList;
 import java.util.List;
 //
 public class ExcelReader {
+
+    private static boolean isCellEmpty(Cell cell) {
+        return cell == null || cell.getCellType() == CellType.BLANK;
+    }
+
+    private static boolean isCellFilled(Cell cell) {
+    return cell != null && cell.getCellType() != CellType.BLANK;
+    }
 
     public static List<List<Collector>> readExcel(String path) {
         List<List<Collector>> collectors = new ArrayList<>();
@@ -25,6 +34,7 @@ public class ExcelReader {
             for(int sheetNo = 0; sheetNo < workbook.getNumberOfSheets(); sheetNo++) {
                 Collector.CollectorBuilder collectorBuilder = Collector.builder();
                 List<WorkerTimeSheet> workerTimeSheetList = new ArrayList<>();
+                List<Error> errorsList = new ArrayList<>();
                 Sheet currSheet = workbook.getSheetAt(sheetNo);
                 int rowCount = currSheet.getPhysicalNumberOfRows();
 
@@ -32,6 +42,7 @@ public class ExcelReader {
                         .replace("_", " ")
                         .replace(".xls", ""))
                         .proName(currSheet.getSheetName());
+
 
                 for (int i = 1; i < rowCount; i++) {
                     Row row = currSheet.getRow(i);
@@ -42,20 +53,62 @@ public class ExcelReader {
                         Cell taskCell = row.getCell(1);
                         Cell timeCell = row.getCell(2);
 
-                        if (dateCell != null && dateCell.getCellType() != CellType.BLANK)
-                            if (DateUtil.isCellDateFormatted(dateCell))
-                                builder.date(dateCell.getLocalDateTimeCellValue().toLocalDate());
-                        if (taskCell != null)
-                            builder.task(taskCell.getStringCellValue());
-                        if (timeCell != null)
-                            builder.time(timeCell.getNumericCellValue());
+                        boolean hasError = false;
+                        boolean isEmptyRow = false;
 
-                        workerTimeSheetList.add(builder.build());
+                        if (isCellEmpty(dateCell) && isCellEmpty(taskCell) && isCellEmpty(timeCell)){
+                            isEmptyRow = true;
+                        }
+
+                        if (isCellFilled(dateCell))
+                            if (dateCell.getCellType() == CellType.NUMERIC && DateUtil.isCellDateFormatted(dateCell)) {
+                                builder.date(dateCell.getLocalDateTimeCellValue().toLocalDate());
+                            } else {
+                                Error er = new Error("wrong data format", path, sheetNo, i, 1);
+                                hasError = true;
+                                errorsList.add(er);
+                            }
+                        if (isCellFilled(taskCell)) {
+                            builder.task(taskCell.getStringCellValue().trim());
+                        }
+                        if (isCellFilled(timeCell)) {
+                            double time = timeCell.getNumericCellValue();
+                            if (time < 0) {
+                                Error er = new Error("negative number for time", path, sheetNo, i, 1);
+                                hasError = true;
+                                errorsList.add(er);
+                            } else {
+                                builder.time(timeCell.getNumericCellValue());
+                            }
+                        }
+
+                        if (isCellEmpty(dateCell) && !isEmptyRow) {
+                            Error er = new Error("empty cell", path, sheetNo, i, 1);
+                            hasError = true;
+                            errorsList.add(er);
+                        }
+
+                        if (isCellEmpty(taskCell) && !isEmptyRow) {
+                            Error er = new Error("empty cell", path, sheetNo, i, 2);
+                            errorsList.add(er);
+                            hasError = true;
+                        }
+
+                        if (isCellEmpty(timeCell) && !isEmptyRow) {
+                            Error er = new Error("empty cell", path, sheetNo, i, 3);
+                            errorsList.add(er);
+                            hasError = true;
+                        }
+
+                        if (!hasError && !isEmptyRow) {
+                            workerTimeSheetList.add(builder.build());
+                        }
                     }
                 }
 
                 collectorBuilder
                         .workerTimeSheetList(workerTimeSheetList)
+                        .errorsList(errorsList)
                         .build();
                 collectorList.add(collectorBuilder.build());
             }

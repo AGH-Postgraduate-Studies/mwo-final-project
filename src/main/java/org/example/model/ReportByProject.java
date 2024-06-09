@@ -23,6 +23,10 @@ public class ReportByProject extends Report {
                     map.put(col.getProName(), ts.getTime());
                 }
             }
+
+            if (col.getErrorsList() != null) {
+                this.errorsList.addAll(col.getErrorsList());
+            }
         }
 
         List<List<Object>> result = new ArrayList<>();
