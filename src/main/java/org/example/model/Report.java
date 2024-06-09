@@ -1,14 +1,18 @@
 package org.example.model;
 
+import org.example.utils.ExcelPrinter;
 import org.example.utils.ExcelReader;
+import org.example.utils.PdfGenerator;
 
 import java.io.File;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Report {
     String path;
-    List<Error> errorsList =  new ArrayList<>();
+    List<Error> errorsList = new ArrayList<>();
 
     public Report(String path) {
         this.path = path;
@@ -43,7 +47,6 @@ public abstract class Report {
                 System.out.print("Error in file: " + er.getFileName() + " in sheet: " + er.getSheet());
                 System.out.print(", in row: " + er.getRow() + ", in column: " + er.getColumn());
                 System.out.print(" Error type is: " + er.getType());
-
                 System.out.println();
             }
         }
@@ -57,6 +60,32 @@ public abstract class Report {
             }
             System.out.println();
         }
+        printErrors();
+    }
+
+    public void generateExcelFromData() {
+        String exportPath = "data/output/";
+        LocalDateTime.now();
+        String fileName = "report_" + LocalDateTime.now().toString().replace(":", "-") + ".xls";
+        String title = getDescription();
+        LocalDate dateFrom = LocalDate.of(2012, 1, 1);
+        LocalDate dateTo = LocalDate.now().plusDays(1);
+
+        ExcelPrinter printer = new ExcelPrinter(
+                exportPath,
+                fileName,
+                title,
+                dateFrom,
+                dateTo
+        );
+
+        List<List<Object>> data = getData(path);
+        for (List<Object> row : data) {
+            printer.addRow(row.toArray());
+        }
+
+        printer.setColumnWidth(new int[]{20, 30, 10});
+        printer.save();
 
         printErrors();
     }
@@ -67,13 +96,27 @@ public abstract class Report {
 
     protected abstract String getDescription();
 
+
+    protected void getPdf()
+    {
+        StringBuilder pdfBody = new StringBuilder(" ");
+
+        pdfBody.append(getDescription());
+        for (List l : getData(path)) {
+            for (Object o : l) {
+                pdfBody.append("    ").append(o).append(" ");
+            }
+        }
+        PdfGenerator.generatePdf(getDescription(),getData(path));
+    }
     public void generate(String output) {
-       switch (output) {
+        switch (output) {
             case "console" -> printToConsole();
-            case "pdf" -> System.out.println("Generating PDF file...");
-            case "excel" -> System.out.println("Generating Excel file...");
+            case "pdf" -> getPdf();
+            case "excel" -> generateExcelFromData();
             case "chart" -> printChart();
             default -> System.out.println("Wrong output provided");
         }
     }
+
 }
