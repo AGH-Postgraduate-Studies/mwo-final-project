@@ -4,9 +4,7 @@ import org.example.utils.ExcelReader;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 public abstract class Report {
     String path;
@@ -30,7 +28,6 @@ public abstract class Report {
                 readFile(folderPath, result);
             }
         }
-
         return result;
     }
 
@@ -54,8 +51,8 @@ public abstract class Report {
 
     public void printToConsole() {
         System.out.println(getDescription());
-        for (List l : getData(path)) {
-            for (Object o : l) {
+        for (var l : getData(path)) {
+            for (var o : l) {
                 System.out.print("    " + o + "\t");
             }
             System.out.println();
@@ -69,17 +66,12 @@ public abstract class Report {
     protected abstract String getDescription();
 
     public void generate(String output) {
-        if (output.equals("console")) {
-            printToConsole();
-        } else if (output.equals("pdf")) {
-            System.out.println("Generating PDF file...");
-        } else if (output.equals("excel")) {
-            System.out.println("Generating Excel file...");
-        } else if (output.equals("chart")) {
-            System.out.println("Generating chart file...");
-        } else {
-            System.out.println("Wrong output provided");
+       switch (output) {
+            case "console" -> printToConsole();
+            case "pdf" -> System.out.println("Generating PDF file...");
+            case "excel" -> System.out.println("Generating Excel file...");
+            case "chart" -> System.out.println("Generating chart file...");
+            default -> System.out.println("Wrong output provided");
         }
     }
-
 }

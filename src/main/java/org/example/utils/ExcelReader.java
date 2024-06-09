@@ -61,7 +61,7 @@ public class ExcelReader {
                         }
 
                         if (isCellFilled(dateCell))
-                            if (DateUtil.isCellDateFormatted(dateCell)) {
+                            if (dateCell.getCellType() == CellType.NUMERIC && DateUtil.isCellDateFormatted(dateCell)) {
                                 builder.date(dateCell.getLocalDateTimeCellValue().toLocalDate());
                             } else {
                                 Error er = new Error("wrong data format", path, sheetNo, i, 1);

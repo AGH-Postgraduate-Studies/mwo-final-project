@@ -1,8 +1,5 @@
 package org.example.model;
 
-import org.example.utils.ExcelReader;
-
-import java.io.File;
 import java.util.*;
 
 import static java.util.Arrays.asList;
