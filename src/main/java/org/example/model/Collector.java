@@ -15,4 +15,5 @@ public class Collector {
     private String devName;
     private String proName;
     private List<WorkerTimeSheet> workerTimeSheetList;
+    private List<Error> errorsList;
 }

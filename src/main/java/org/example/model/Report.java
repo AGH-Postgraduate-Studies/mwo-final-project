@@ -10,6 +10,7 @@ import java.util.Set;
 
 public abstract class Report {
     String path;
+    List<Error> errorsList =  new ArrayList<>();
 
     public Report(String path) {
         this.path = path;
@@ -37,6 +38,20 @@ public abstract class Report {
         ExcelReader.readExcel(path).forEach(result::addAll);
     }
 
+    protected void printErrors() {
+        if (errorsList != null && !errorsList.isEmpty()) {
+            System.out.println();
+            System.out.println("Errors");
+            for (Error er : errorsList) {
+                System.out.print("Error in file: " + er.getFileName() + " in sheet: " + er.getSheet());
+                System.out.print(", in row: " + er.getRow() + ", in column: " + er.getColumn());
+                System.out.print(" Error type is: " + er.getType());
+
+                System.out.println();
+            }
+        }
+    }
+
     public void printToConsole() {
         System.out.println(getDescription());
         for (List l : getData(path)) {
@@ -45,6 +60,8 @@ public abstract class Report {
             }
             System.out.println();
         }
+
+        printErrors();
     }
 
     protected abstract List<List<Object>> getData(String path);

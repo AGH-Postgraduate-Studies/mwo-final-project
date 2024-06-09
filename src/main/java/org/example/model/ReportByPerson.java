@@ -23,6 +23,10 @@ public class ReportByPerson extends Report {
                     map.put(col.getDevName(), ts.getTime());
                 }
             }
+
+            if (col.getErrorsList() != null) {
+                this.errorsList.addAll(col.getErrorsList());
+            }
         }
 
         List<List<Object>> result = new ArrayList<>();
