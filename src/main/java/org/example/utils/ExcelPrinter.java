@@ -16,8 +16,6 @@ public class ExcelPrinter {
     @Getter
     private final String title;
     @Getter
-    private final String person;
-    @Getter
     private final LocalDate dateFrom;
     @Getter
     private final LocalDate dateTo;
@@ -25,12 +23,11 @@ public class ExcelPrinter {
     private HSSFSheet sheet;
     private int rowIndex = 0;
 
-    public ExcelPrinter(String exportPath, String fileName, String title, String person, LocalDate dateFrom,
+    public ExcelPrinter(String exportPath, String fileName, String title, LocalDate dateFrom,
                         LocalDate dateTo) {
         this.exportPath = exportPath;
         this.fileName = fileName;
         this.title = title;
-        this.person = person;
         this.dateFrom = dateFrom;
         this.dateTo = dateTo;
         this.workbook = new HSSFWorkbook();
