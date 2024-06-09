@@ -69,13 +69,11 @@ public abstract class Report {
         String title = getDescription();
         LocalDate dateFrom = LocalDate.of(2012, 1, 1);
         LocalDate dateTo = LocalDate.now().plusDays(1);
-        String person = "Kowalski_Jan";
 
         ExcelPrinter printer = new ExcelPrinter(
                 exportPath,
                 fileName,
                 title,
-                person,
                 dateFrom,
                 dateTo
         );
