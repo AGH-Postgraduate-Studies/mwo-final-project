@@ -62,44 +62,20 @@ public abstract class Report {
         printErrors();
     }
 
-    public void generateExcel() {
-        String exportPath = "data/output/report.xls";
-        String fileName = "report.xls";
-        String title = "Report";
-        String person = "Kowalski_Jan.xls";
+    public void generateExcelFromData() {
+        String exportPath = "data/output/";
+        LocalDateTime.now();
+        String fileName = "report_" + LocalDateTime.now().toString().replace(":", "-") + ".xls";
+        String title = getDescription();
         LocalDate dateFrom = LocalDate.of(2012, 1, 1);
         LocalDate dateTo = LocalDate.now().plusDays(1);
+        String person = "Kowalski_Jan";
 
         ExcelPrinter printer = new ExcelPrinter(
                 exportPath,
                 fileName,
                 title,
                 person,
-                dateFrom,
-                dateTo
-        );
-
-        for (int i = 1; i <= 10; i++) {
-            printer.addRow(fileName, "Project " + i, i * 1.5);
-        }
-
-        printer.setColumnWidth(new int[]{20, 30, 10});
-        printer.save();
-    }
-
-    public void generateExcelFromData() {
-        String exportPath = "data/output/report.xls";
-        LocalDateTime.now();
-        String fileName = "report" + LocalDateTime.now().toString().replace(":", "-") + ".xls";
-        String title = getDescription();
-        LocalDate dateFrom = LocalDate.of(2012, 1, 1);
-        LocalDate dateTo = LocalDate.now().plusDays(1);
-
-        ExcelPrinter printer = new ExcelPrinter(
-                exportPath,
-                fileName,
-                title,
-                "Generated_Report",
                 dateFrom,
                 dateTo
         );
